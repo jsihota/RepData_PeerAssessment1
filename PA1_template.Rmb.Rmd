@@ -1,0 +1,34 @@
+---
+title: "Peer Assessment 1"
+author: "jagdeep s sihota"
+date: "August 11, 2014"
+output: html_document
+---
+
+This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
+
+Data
+
+The data for this assignment can be downloaded from the course web site:
+Dataset: Activity monitoring data [52K]
+
+
+Loading and preprocessing the data
+
+
+```{r}
+if (!file.exists("activity.csv")) {
+    unzip("activity.zip")
+}
+activity <- read.csv("activity.csv", colClasses = c("numeric", "character", 
+    "numeric"))
+head(activity)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+
