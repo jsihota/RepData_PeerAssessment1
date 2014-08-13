@@ -22,13 +22,19 @@ if (!file.exists("activity.csv")) {
 }
 activity <- read.csv("activity.csv", colClasses = c("numeric", "character", 
     "numeric"))
-head(activity)
+activity$date <- as.Date(activity$date, "%Y-%m-%d")
+totalSteps <- aggregate(steps ~ date, data = activity, sum, na.rm = TRUE)
+
+hist(totalSteps$steps, main = "Total steps by day", xlab = "day", col = "green")
 ```
 
-You can also embed plots, for example:
 
-```{r, echo=FALSE}
-plot(cars)
+What is mean total number of steps taken per day?
+And the mean and median is
+```{r}
+  mean(totalSteps$steps)
+  median(totalSteps$steps)
 ```
+
 
 
