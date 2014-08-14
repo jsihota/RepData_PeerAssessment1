@@ -93,6 +93,22 @@ Get median
 median(activityDataWithNAReplaced$steps, na.rm = TRUE)
 ```
 
+The Mean is equal to the estimates from the first part of the assignment.
+
+The Median is slightly lower when compared to the first part of the assignment.
+
+The histogram shows a similar shape as before with overall higher frequencies due to the NA being replaced in the new histogram. See also this side by side plot:
+```{r}
+activityWithNa <- aggregate(activity$steps, by = list(activity$date), sum)
+names(activityWithNa)[1] <- "day"
+names(activityWithNa)[2] <- "steps"
+par(mfrow = c(1, 2))
+
+hist(activityWithNa$steps, main = "(with NA)", xlab = "total number of steps taken each day")
+
+hist(activityDataWithNAReplaced$steps, main = "(NA replaced)", xlab = "total number of steps taken each day")
+```
+
 Are there differences in activity patterns between weekdays and weekends?
 ```{r}
 day <- weekdays(activity$date)
