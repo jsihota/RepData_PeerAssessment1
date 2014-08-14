@@ -66,35 +66,31 @@ activity_NA <- sum(is.na(activity))
 activity_NA
 ```
 
-missing values are replaced with average of steps per interval, using pre-calculated result
+missing values are replaced with average of steps per interval
 ```{r}
-naRepacedData <- totalSteps
-for(i in 1:length(naRepacedData[,1])) {
-
-        if(is.na(naRepacedData[i,1])){
-                flag <- as.character(naRepacedData[i,"interval"])
-                #fill missing value with mean for 5-minute value
-                naRepacedData[i,1] <- mean.step[flag]
-        }
-}
+meanInterval <- aggregate(activity$steps, by = list(activity$interval), mean, na.rm = TRUE, 
+    na.action = NULL)
+names(meanInterval)[1] <- "interval"
+names(meanInterval)[2] <- "mean.steps"
+naRepacedData <- merge(activity, meanInterval, by = "interval", sort = FALSE)  
+naRepacedData <- naRepacedData[with(naRepacedData, order(date, interval)), ]  
+naRepacedData$steps[is.na(naRepacedData$steps)] <- naRepacedData$mean.steps[is.na(naRepacedData$steps)]
+nAReplacedData <- naRepacedData[, c(2, 3, 1)]
 ```
 plot
 ```{r}
-sum.step2 <- with(naRepacedData, tapply(naRepacedData$steps, naRepacedData$date, sum))
-data.hist2 <- data.frame("date"=strptime(names(sum.step2),"%Y-%m-%d"),
-                        "steps"=sum.step2, row.names=NULL)
-with(data.hist2, barplot(steps, names=date, xlab="data",
-                   ylab="total number of steps taken each day", col="red"))
+activityDataWithNAReplaced <- aggregate(nAReplacedData$steps, by = list(nAReplacedData$date), sum)
+names(activityDataWithNAReplaced)[1] <- "day"
+names(activityDataWithNAReplaced)[2] <- "steps"
+hist(activityDataWithNAReplaced$steps, main = "Histogram of the total number of steps taken each day (NA replaced)", xlab = "total number of steps taken each day", col = "green")
 ```
 Get mean
 ```{r}
-mean.day2 <- mean(sum.step2)
-mean.day2
+mean(activityDataWithNAReplaced$steps, na.rm = TRUE)
 ```
 Get median
 ```{r}
-median.day2 <- median(sum.step2)
-median.day2
+median(activityDataWithNAReplaced$steps, na.rm = TRUE)
 ```
 
 Are there differences in activity patterns between weekdays and weekends?
